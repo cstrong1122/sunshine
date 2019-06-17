@@ -9,23 +9,25 @@ import (
 
 func main() {
 
-	fooProvider := foobank.FooBankRateProvider{}
-	fooParameters := &moonlight.RateOptionParameters{
+	provider := moonlight.IRateOptionProviderAdapter(foobank.FooBankRateProvider{})
+
+	parameters := &moonlight.RateOptionParameters{
 		FICO:  750,
 		CLTV:  80,
 		LTV:   80,
 		HCLTV: 90}
 
 	fmt.Println("####### START RATE OPTION PARAMETERS #######")
-	fmt.Println("FICO:", fooParameters.FICO)
-	fmt.Println("LTV:", fooParameters.LTV)
-	fmt.Println("CLTV:", fooParameters.CLTV)
-	fmt.Println("HCLTV:", fooParameters.HCLTV)
+	fmt.Println("FICO:", parameters.FICO)
+	fmt.Println("LTV:", parameters.LTV)
+	fmt.Println("CLTV:", parameters.CLTV)
+	fmt.Println("HCLTV:", parameters.HCLTV)
 	fmt.Print("####### END RATE OPTION PARAMETERS #######", "\n\n\n")
 
-	fooOptions, err := fooProvider.GetRateOptions(fooParameters)
+	rateOptions, err := provider.GetRateOptions(parameters)
+
 	if err == nil {
-		for _, option := range fooOptions {
+		for _, option := range rateOptions {
 			fmt.Println("######## START RATE OPTION ########")
 			fmt.Println("Rate:", option.InterestRate)
 			fmt.Println("Origination Points:", option.OriginationPoints)
